@@ -222,6 +222,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ui: {fileID: 840183211}
+  scoreText: {fileID: 1320542291}
+  livesText: {fileID: 1855146092}
+  levelText: {fileID: 1083140511}
   level: 1
   score: 0
   lives: 3
@@ -388,7 +391,7 @@ GameObject:
   - component: {fileID: 1083140512}
   - component: {fileID: 1083140511}
   m_Layer: 5
-  m_Name: level text
+  m_Name: levelText
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -523,7 +526,7 @@ GameObject:
   - component: {fileID: 1320542292}
   - component: {fileID: 1320542291}
   m_Layer: 5
-  m_Name: score text
+  m_Name: scoreText
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -658,7 +661,7 @@ GameObject:
   - component: {fileID: 1855146093}
   - component: {fileID: 1855146092}
   m_Layer: 5
-  m_Name: lives text
+  m_Name: livesText
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

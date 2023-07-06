@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using UnityEngine.SceneManagement;
+using TMPro;
 
 public class GameManager : MonoBehaviour
 {
@@ -9,6 +10,9 @@ public class GameManager : MonoBehaviour
     public Paddle paddle { get; private set; }
     public Brick[] bricks { get; private set; }
     public GameObject ui;
+    public TextMeshProUGUI scoreText;
+    public TextMeshProUGUI livesText;
+    public TextMeshProUGUI levelText;
 
     public int level = 1;
     public int score = 0;
@@ -25,6 +29,13 @@ public class GameManager : MonoBehaviour
     private void Start()
     {
         NewGame();
+    }
+
+    private void Update()
+    {
+        scoreText.text = "Score " + score.ToString();
+        livesText.text = "Lives remaining " + lives.ToString();
+        levelText.text = "Level " + level.ToString();
     }
 
     private void NewGame()
