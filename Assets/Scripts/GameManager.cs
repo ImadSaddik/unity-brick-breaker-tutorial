@@ -8,6 +8,7 @@ public class GameManager : MonoBehaviour
     public Ball ball { get; private set; }
     public Paddle paddle { get; private set; }
     public Brick[] bricks { get; private set; }
+    public GameObject ui;
 
     public int level = 1;
     public int score = 0;
@@ -16,6 +17,7 @@ public class GameManager : MonoBehaviour
     private void Awake()
     {
         DontDestroyOnLoad(gameObject);
+        DontDestroyOnLoad(ui);
 
         SceneManager.sceneLoaded += OnLevelLoaded;
     }
