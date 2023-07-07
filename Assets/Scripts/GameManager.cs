@@ -5,7 +5,6 @@ using TMPro;
 public class GameManager : MonoBehaviour
 {
     const int NUM_LEVELS = 3;
-
     public Ball ball { get; private set; }
     public Paddle paddle { get; private set; }
     public Brick[] bricks { get; private set; }
@@ -13,6 +12,7 @@ public class GameManager : MonoBehaviour
     public TextMeshProUGUI scoreText;
     public TextMeshProUGUI livesText;
     public TextMeshProUGUI levelText;
+    private EndScreenUI endScreenUI;
 
     public int level = 1;
     public int score = 0;
@@ -33,16 +33,22 @@ public class GameManager : MonoBehaviour
 
     private void Update()
     {
+        updateUIElements();
+    }
+
+    private void updateUIElements()
+    {
         scoreText.text = "Score " + score.ToString();
         livesText.text = "Lives remaining " + lives.ToString();
         levelText.text = "Level " + level.ToString();
     }
 
-    private void NewGame()
+    public void NewGame()
     {
         score = 0;
         lives = 3;
-
+        ui.SetActive(true);
+        
         LoadLevel(1);
     }
 
@@ -52,9 +58,7 @@ public class GameManager : MonoBehaviour
 
         if (level > NUM_LEVELS)
         {
-            // Start over again at level 1 once you have beaten all the levels
-            // You can also load a "Win" scene instead
-            LoadLevel(1);
+            SceneManager.LoadScene("EndScene");
             return;
         }
 
@@ -63,9 +67,30 @@ public class GameManager : MonoBehaviour
 
     private void OnLevelLoaded(Scene scene, LoadSceneMode mode)
     {
+        if (level <= NUM_LEVELS) {
+            instantiateBallPaddleBricks();
+        } else {
+            endScreenUI = FindObjectOfType<EndScreenUI>();
+            sendDataToEndScreen();
+            ui.SetActive(false);
+        }
+
+    }
+
+    private void instantiateBallPaddleBricks()
+    {
         ball = FindObjectOfType<Ball>();
         paddle = FindObjectOfType<Paddle>();
         bricks = FindObjectsOfType<Brick>();
+    }
+
+    private void sendDataToEndScreen()
+    {
+        endScreenUI.bestScoreText.text = "Best Score: " + score.ToString();
+        endScreenUI.livesRemainingText.text = "Lives Remaining: " + lives.ToString();
+
+        if (level <= NUM_LEVELS)
+            endScreenUI.levelReachedText.text = "Level Reached: " + level.ToString();
     }
 
     public void Miss()
@@ -83,11 +108,6 @@ public class GameManager : MonoBehaviour
     {
         paddle.ResetPaddle();
         ball.ResetBall();
-
-        // Resetting the bricks is optional
-        // for (int i = 0; i < bricks.Length; i++) {
-        //     bricks[i].ResetBrick();
-        // }
     }
 
     private void GameOver()
@@ -117,5 +137,4 @@ public class GameManager : MonoBehaviour
 
         return true;
     }
-
 }
