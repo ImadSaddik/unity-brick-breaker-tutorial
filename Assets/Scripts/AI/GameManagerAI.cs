@@ -1,34 +1,49 @@
 using UnityEngine;
-using UnityEngine.SceneManagement;
 using TMPro;
 
 public class GameManagerAI : MonoBehaviour
 {
-    const int NUM_LEVELS = 3;
     public Ball ball { get; private set; }
-    public Paddle paddle { get; private set; }
-    public Brick[] bricks { get; private set; }
-    public GameObject ui;
+    public PaddleAgent agent { get; private set; }
+    public BrickAI[] bricks { get; private set; }
     public TextMeshProUGUI scoreText;
     public TextMeshProUGUI livesText;
-    public TextMeshProUGUI levelText;
-    private EndScreenUI endScreenUI;
+    public TextMeshProUGUI rewardText;
 
-    public int level = 1;
     public int score = 0;
     public int lives = 3;
 
     private void Awake()
     {
-        DontDestroyOnLoad(gameObject);
-        DontDestroyOnLoad(ui);
+        instantiateBallPaddleBricks();
+    }
 
-        SceneManager.sceneLoaded += OnLevelLoaded;
+    private void instantiateBallPaddleBricks()
+    {
+        ball = FindObjectOfType<Ball>();
+        agent = FindObjectOfType<PaddleAgent>();
+        bricks = FindObjectsOfType<BrickAI>();
     }
 
     private void Start()
     {
         NewGame();
+    }
+
+    public void NewGame()
+    {
+        score = 0;
+        lives = 3;
+        activateBricks();
+        ResetLevel();
+    }
+
+    private void activateBricks()
+    {
+        for (int i = 0; i < bricks.Length; i++)
+        {
+            bricks[i].ResetBrick();
+        }
     }
 
     private void Update()
@@ -40,60 +55,7 @@ public class GameManagerAI : MonoBehaviour
     {
         scoreText.text = "Score " + score.ToString();
         livesText.text = "Lives remaining " + lives.ToString();
-        levelText.text = "Level " + level.ToString();
-    }
-
-    public void NewGame()
-    {
-        score = 0;
-        lives = 3;
-        ui.SetActive(true);
-        
-        LoadLevel(1);
-    }
-
-    private void LoadLevel(int level)
-    {
-        this.level = level;
-
-        if (level > NUM_LEVELS)
-        {
-            SceneManager.LoadScene("EndScene");
-            return;
-        }
-
-        SceneManager.LoadScene("Level" + level);
-    }
-
-    private void OnLevelLoaded(Scene scene, LoadSceneMode mode)
-    {
-        if (scene.name == "GameOver" || level > NUM_LEVELS)
-        {
-            endScreenUI = FindObjectOfType<EndScreenUI>();
-            sendDataToEndScreen();
-            ui.SetActive(false);
-        }
-
-        if (level <= NUM_LEVELS)
-        {
-            instantiateBallPaddleBricks();
-        }
-    }
-
-    private void instantiateBallPaddleBricks()
-    {
-        ball = FindObjectOfType<Ball>();
-        paddle = FindObjectOfType<Paddle>();
-        bricks = FindObjectsOfType<Brick>();
-    }
-
-    private void sendDataToEndScreen()
-    {
-        endScreenUI.bestScoreText.text = "Best Score: " + score.ToString();
-        endScreenUI.livesRemainingText.text = "Lives Remaining: " + lives.ToString();
-
-        if (level <= NUM_LEVELS)
-            endScreenUI.levelReachedText.text = "Level Reached: " + level.ToString();
+        rewardText.text = "Reward " + agent.GetCumulativeReward().ToString("0.00");
     }
 
     public void Miss()
@@ -101,6 +63,7 @@ public class GameManagerAI : MonoBehaviour
         lives--;
 
         if (lives > 0) {
+            agent.AddReward(-0.5f);
             ResetLevel();
         } else {
             GameOver();
@@ -109,21 +72,26 @@ public class GameManagerAI : MonoBehaviour
 
     private void ResetLevel()
     {
-        paddle.ResetPaddle();
+        agent.ResetAgent();
         ball.ResetBall();
     }
 
     private void GameOver()
     {
-        SceneManager.LoadScene("GameOver");
+        agent.AddReward(-1f);
+        agent.EndEpisode();
+        NewGame();
     }
 
-    public void Hit(Brick brick)
+    public void Hit(BrickAI brick)
     {
         score += brick.points;
+        agent.AddReward(0.01f);
 
         if (Cleared()) {
-            LoadLevel(level + 1);
+            agent.AddReward(1f);
+            agent.EndEpisode();
+            NewGame();
         }
     }
 

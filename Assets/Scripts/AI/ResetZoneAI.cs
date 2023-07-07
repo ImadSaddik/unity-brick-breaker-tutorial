@@ -1,11 +1,11 @@
-﻿using UnityEngine;
+using UnityEngine;
 
 [RequireComponent(typeof(Collider2D))]
-public class ResetZone : MonoBehaviour
+public class ResetZoneAI : MonoBehaviour
 {
     private void OnTriggerEnter2D(Collider2D other)
     {
-        GameManager gameManager = FindObjectOfType<GameManager>();
+        GameManagerAI gameManager = FindObjectOfType<GameManagerAI>();
         Ball ball = other.gameObject.GetComponent<Ball>();
 
         if (gameManager != null) {
@@ -14,5 +14,4 @@ public class ResetZone : MonoBehaviour
             ball.ResetBall();
         }
     }
-
 }
