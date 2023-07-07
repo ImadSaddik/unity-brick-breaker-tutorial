@@ -67,14 +67,17 @@ public class GameManager : MonoBehaviour
 
     private void OnLevelLoaded(Scene scene, LoadSceneMode mode)
     {
-        if (level <= NUM_LEVELS) {
-            instantiateBallPaddleBricks();
-        } else {
+        if (scene.name == "GameOver" || level > NUM_LEVELS)
+        {
             endScreenUI = FindObjectOfType<EndScreenUI>();
             sendDataToEndScreen();
             ui.SetActive(false);
         }
 
+        if (level <= NUM_LEVELS)
+        {
+            instantiateBallPaddleBricks();
+        }
     }
 
     private void instantiateBallPaddleBricks()
@@ -112,9 +115,7 @@ public class GameManager : MonoBehaviour
 
     private void GameOver()
     {
-        // Start a new game immediately
-        // You can also load a "GameOver" scene instead
-        NewGame();
+        SceneManager.LoadScene("GameOver");
     }
 
     public void Hit(Brick brick)
