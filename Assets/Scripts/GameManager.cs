@@ -4,7 +4,7 @@ using TMPro;
 
 public class GameManager : MonoBehaviour
 {
-    const int NUM_LEVELS = 2;
+    const int NUM_LEVELS = 3;
 
     public Ball ball { get; private set; }
     public Paddle paddle { get; private set; }
