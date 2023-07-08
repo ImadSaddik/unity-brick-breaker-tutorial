@@ -19,6 +19,7 @@ public class PaddleAgent : Agent
     public override void OnEpisodeBegin()
     {
         ResetAgent();
+        ball.ResetBall();
     }
 
     public void ResetAgent()
