@@ -6,3 +6,8 @@
 - **Version**: Unity 2019.4 (LTS)
 - [**Download**](https://github.com/zigurous/unity-brick-breaker-tutorial/archive/refs/heads/main.zip)
 - [**Watch Video**](https://youtu.be/RYG8UExRkhA)
+
+<hr/>
+I am grateful to @zigurous for sharing this project. I added AI features to the project, which was a great way to apply what I've been learning in school as an AI & DS student. I wanted to create an agent that could control the paddle and win the game. I used the ml-agents library to train my agent. The pretrained model is included in this repository and can be found in the Models folder. I also recorded a short clip of the agent playing the game to show its performance.
+
+![](Recordings/movie_001.webm)
