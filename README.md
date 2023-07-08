@@ -9,3 +9,6 @@
 
 <hr/>
 I am grateful to @zigurous for sharing this project. I added AI features to the project, which was a great way to apply what I've been learning in school as an AI & DS student. I wanted to create an agent that could control the paddle and win the game. I used the ml-agents library to train my agent. The pretrained model is included in this repository and can be found in the Models folder. I also recorded a short clip of the agent playing the game to show its performance.
+
+### Demo - Agent playing the game
+https://github.com/ImadSaddik/unity-brick-breaker-tutorial/assets/79410781/eb895f9f-d2e0-4a35-aed2-440c10a6e693
